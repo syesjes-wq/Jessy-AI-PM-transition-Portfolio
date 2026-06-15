@@ -80,44 +80,42 @@ While Stockfish provides evidence that a mistake occurred, it does not directly 
 This raised concerns about whether Stockfish could serve as a benchmark for evaluating finding correctness.
 
 ---
-
 ## Key Discovery
 
-The investigation revealed that finding correctness could not be evaluated until a clear definition of a valid finding and its supporting evidence had been established.
+The initial evaluation strategy relied on the Finding Taxonomy.
 
-Without this bridge, it was impossible to determine whether an AI-generated finding was correct, regardless of whether the benchmark was:
+The expectation was that AI-generated findings could be evaluated by mapping them directly to predefined beginner chess findings and observable criteria.
 
-* Stockfish
-* A chess coach
-* Chess learning material
+A taxonomy containing 17 beginner-level chess finding categories was created from chess learning material and intended to serve as the primary evaluation benchmark.
 
-This led to the creation of a finding taxonomy and evaluation framework before proceeding with experimentation.
+However, early testing revealed that fewer than 10% of AI-generated findings mapped cleanly to taxonomy entries.
 
----
+Most findings were:
 
-## Finding Taxonomy
+* Variations of taxonomy findings
+* More specific than taxonomy entries
+* Combinations of multiple taxonomy concepts
+* Expressed using different wording than the taxonomy
 
-A finding taxonomy was created using beginner-focused chess learning material.
+As a result, taxonomy coverage was insufficient to serve as the primary evaluation mechanism.
 
-The taxonomy serves as an evaluation artifact and is not used as an input to the AI.
+This led to a shift in evaluation strategy.
 
-The taxonomy defines:
+Instead of evaluating findings through taxonomy matching, a second LLM was introduced as a judge to independently assess finding correctness.
 
-* Valid findings
-* Observable criteria supporting each finding
-* Consequences of the finding
-* Traceability between findings and game evidence
+Initial evaluations were performed manually.
 
-Each taxonomy entry contains:
+Repeated review of these evaluations exposed inconsistencies in how the judge:
 
-| Field               | Description                              |
-| ------------------- | ---------------------------------------- |
-| Category            | Type of mistake or learning pattern      |
-| Finding             | Recurring chess pattern being identified |
-| Observable Criteria | Evidence required for validation         |
-| Consequence         | Likely impact on the position or game    |
+* Extracted claims
+* Processed evidence
+* Interpreted chess terminology
+* Escalated to PGN analysis
+* Distinguished evidence quality from finding correctness
 
-The taxonomy intentionally focuses on beginner-level concepts that are observable, traceable, and understandable to parents.
+These observations ultimately led to the development of a formal Finding Evaluation Framework.
+
+The framework evolved iteratively through evaluation of real findings and was refined through multiple rounds of failure analysis before being used in the final feasibility study.
 
 ---
 
@@ -206,29 +204,42 @@ The observed accuracy exceeded the predefined feasibility threshold of 70% and f
 
 ## Key Learnings
 
-The experiment revealed an important distinction between **finding correctness** and **evidence traceability**.
+The most significant discovery was that a theoretically complete benchmark does not automatically translate into a practical evaluation mechanism.
+
+The initial evaluation strategy relied on a finding taxonomy containing beginner-level chess concepts and observable criteria. However, early testing revealed that fewer than 10% of AI-generated findings mapped cleanly to taxonomy entries. While the taxonomy remained useful for defining concepts, it proved insufficient as the primary evaluation mechanism.
+
+This led to the introduction of an LLM-as-Judge approach and the development of a dedicated Finding Evaluation Framework.
+
+During framework implementation, multiple evaluator failure modes were discovered, including:
+
+* Converting evidence into evaluation claims
+* Completing plausible narratives when evidence was incomplete
+* Escalating analysis even after all claims had been verified
+* Prioritizing certain evidence sources over others
+* Requiring unnecessary corroboration across evidence sources
+* Verifying chess concepts using consequences rather than definitions
+
+These failures highlighted that designing an evaluation system requires more than defining correctness criteria. It also requires explicit controls over how evaluators process evidence, resolve uncertainty, and determine when evaluation should stop.
+
+The final experiment revealed an important distinction between **finding correctness** and **evidence traceability**.
 
 Although 38 findings (80.9%) were ultimately determined to be factually correct, 18 findings (38.3%) could not be fully verified from the evidence package alone and required escalation to full PGN analysis.
 
-Several recurring evaluation challenges were observed:
+Most failures were evidence-traceability failures rather than chess-reasoning failures. In many cases, the AI reached the correct conclusion, but the supporting evidence was insufficient for an independent evaluator to verify the claim without additional analysis.
 
-* Chess-specific concepts whose definitions were not directly established by the evidence
-* Causal statements where the evidence established correlation but not causation
-* Subjective terminology requiring operational definitions before evaluation
-* Findings where the conclusion was correct but the supplied evidence did not fully support every explicit claim
-
-Most failures were evidence-traceability failures rather than chess-reasoning failures.
-
-In many cases, the AI reached the correct conclusion, but the supporting evidence was insufficient for an independent evaluator to verify the claim without additional PGN analysis.
-
-This led to several refinements to the evaluation framework:
+These observations led to several refinements to the evaluation framework, including:
 
 * Definition-first evaluation of chess terminology
+* Explicit claim decomposition rules
 * Anti-substitution evaluation rules
-* Explicit separation of Evidence Verification and Finding Validation
-* Mandatory escalation to PGN analysis when evidence is incomplete
+* Structured evidence processing requirements
+* Separation of Evidence Verification and Finding Validation
+* Explicit escalation and termination criteria
+* Mandatory PGN analysis when evidence is incomplete
 
-A key outcome of the experiment was the discovery that finding correctness and evidence traceability should be treated as separate quality dimensions in future evaluations.
+A key outcome of this feasibility study was the discovery that evaluation quality depends not only on the accuracy of the underlying AI system, but also on the design of the evaluation process itself.
+
+Finding correctness and evidence traceability should therefore be treated as separate quality dimensions in future evaluations.
 
 ---
 
