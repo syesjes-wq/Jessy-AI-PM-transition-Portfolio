@@ -46,19 +46,11 @@ Reliable concept selection depends on first identifying the instructional behavi
 
 ### Sub-Principle Before Concept
 
-An explicit sub-principle layer was introduced between findings and concepts:
+An explicit hierarchy was introduced between findings and concepts to improve traceability, concept selection, and instructional consistency.
 
-```text
-Finding
-↓
-Behavior
-↓
-Sub-Principle
-↓
-Concept
-```
+![Concept Hierarchy](../assets/concept_hierarchy.png)
 
-This improves traceability and hierarchy selection.
+*Concept hierarchy used during concept mapping. Findings are first translated into behaviors, then mapped to the smallest instructional principle before selecting the broader concept.*
 
 ### Selection Over Generation
 
